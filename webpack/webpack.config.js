@@ -21,6 +21,14 @@ module.exports = {
             loader: 'babel-loader',
           }
         ]
+      },
+      {
+        test: /\.(?:jpg|jpeg|png|gif|ico)$/i,
+        type: 'asset/resource'
+      },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
+        type: 'asset/inline'
       }
     ]
   },
