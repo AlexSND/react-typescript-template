@@ -1,11 +1,13 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: path.resolve(__dirname, '..', './src/index.tsx'),
   output: {
     path: path.resolve(__dirname, '..', './build'),
-    filename: 'bundle.js'
+    filename: 'bundle.[hash].js',
+    clean: true,
   },
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
@@ -24,24 +26,37 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          "style-loader",
-          "css-loader",
-          "sass-loader",
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
         ],
       },
       {
         test: /\.(?:jpg|jpeg|png|gif|ico)$/i,
-        type: 'asset/resource'
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/[name].[ext]'
+        }
       },
       {
-        test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
+        test: /\.(svg)$/,
         type: 'asset/inline'
+      },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name].[ext]'
+        }
       }
     ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '..', './src/index.html')
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].[hash].css'
     })
   ]
-}
+};
